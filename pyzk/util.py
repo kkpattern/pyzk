@@ -1,5 +1,6 @@
 # Copyright (c) 2012 zhangkai
 
+import socket
 import sys
 import threading
 import traceback
@@ -19,6 +20,18 @@ def dump_stacks(signal, frame):
             if line:
                 code.append("  %s" % (line.strip()))
     print "\n".join(code)
+  
+def get_local_ip_address(target):
+    """get the local ip address used to connect to the target."""
+    ipaddr = None
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect((target, 8000))
+        ipaddr = s.getsockname()[0]
+        s.close()
+    except:
+        pass
+    return ipaddr
 
 class Progress(object):
     """Progress object.
