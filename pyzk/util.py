@@ -1,5 +1,25 @@
 # Copyright (c) 2012 zhangkai
 
+import sys
+import threading
+import traceback
+
+def dump_stacks(signal, frame):
+    """dump the stacks of all threads in a process.
+
+    Thanks to haridsv and Will on StackOverflow.
+
+    """
+    id2name = dict([(th.ident, th.name) for th in threading.enumerate()])
+    code = []
+    for threadId, stack in sys._current_frames().items():
+        code.append("\n# Thread: %s(%d)"%(id2name.get(threadId,""), threadId))
+        for filename, lineno, name, line in traceback.extract_stack(stack):
+            code.append('File: "%s", line %d, in %s'%(filename, lineno, name))
+            if line:
+                code.append("  %s" % (line.strip()))
+    print "\n".join(code)
+
 class Progress(object):
     """Progress object.
 
