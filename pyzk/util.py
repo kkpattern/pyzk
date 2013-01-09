@@ -27,7 +27,7 @@ class Progress(object):
         return self
 
     def __float__(self):
-        return self.current_value/self.max_value
+        return float(self.current_value)/self.max_value
 
     def __str__(self):
         return "{0:.1f}%".format(float(self)*100)
@@ -39,9 +39,9 @@ class Progress(object):
             accuracy: digits after the decimal point.
 
         """
-        current_progress = round(self.current_value*100/self.max_value,
+        current_progress = round(float(self.current_value*100)/self.max_value,
                                  accuracy)
-        previous_progress = round(self.previous_value*100/self.max_value,
+        previous_progress = round(float(self.previous_value*100)/self.max_value,
                                  accuracy)
         if current_progress > previous_progress:
-            print("{0}%".format(current_progress))
+            print "{0}%".format(current_progress)
