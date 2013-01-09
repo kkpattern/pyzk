@@ -33,6 +33,30 @@ def get_local_ip_address(target):
         pass
     return ipaddr
 
+class Retry(object):
+    """Add retry to target function.
+
+    Args:
+        target: target function.
+        max_retry: max retry times.
+        exception_handler: function(retry_time, exception_object)
+                           called when exception is raised by target.
+
+    """
+    def __init__(self, target, max_retry, exception_handler):
+        self.__target = target
+        self.__max_retry = max_retry
+        self.__exception_handler = exception_handler
+
+    def __call__(self, *args, **kargs):
+        for i in range(self.__max_retry-1):
+            try:
+                return self.__target(*args, **kargs)
+            except Exception as e:
+                self.__exception_handler(i, e)
+        # NOTE: final shot. raise the exception if somethins is wrong.
+        return self.__target(*args, **kargs)
+
 class Progress(object):
     """Progress object.
 
