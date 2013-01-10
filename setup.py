@@ -8,7 +8,7 @@ if sys.version_info[0] < 3:
     exit(1)
 
 setup(name="pyzk",
-      version="0.0.1",
+      version="0.0.2",
       description="The personal python lib of zhangkai.",
       author="Zhang Kai",
       author_email="kylerzhang11@gmail.com",

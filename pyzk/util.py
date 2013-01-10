@@ -1,5 +1,7 @@
 # Copyright (c) 2012 zhangkai
 
+import sys
+
 class Progress(object):
     """Progress object.
 
@@ -11,6 +13,11 @@ class Progress(object):
         self.previous_value = 0
         self.current_value = current_value
         self.max_value = max_value
+        self.out = sys.stdout
+        if hasattr(self.out, "isatty") and self.out.isatty():
+            self.carriage = '\r'
+        else:
+            self.carriage = '\n'
 
     def __iadd__(self, value):
         self.previous_value = self.current_value
@@ -44,4 +51,4 @@ class Progress(object):
         previous_progress = round(self.previous_value*100/self.max_value,
                                  accuracy)
         if current_progress > previous_progress:
-            print("{0}%".format(current_progress))
+            self.out.write("{0}%{1}".format(current_progress, self.carriage))
