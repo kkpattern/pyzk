@@ -52,3 +52,4 @@ class Progress(object):
                                  accuracy)
         if current_progress > previous_progress:
             self.out.write("{0}%{1}".format(current_progress, self.carriage))
+            self.out.flush()
