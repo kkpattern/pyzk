@@ -1,5 +1,6 @@
 # Copyright (c) 2012 zhangkai
 
+import datetime
 import socket
 import sys
 import threading
@@ -110,4 +111,39 @@ class Progress(object):
                                  accuracy)
         if current_progress > previous_progress:
             self.out.write("{0}% {1}".format(current_progress, self.carriage))
+            self.out.flush()
+
+class TimedProgress(Progress):
+    def __init__(self, current_value=0, max_value=100, out=None):
+        super(TimedProgress, self).__init__(current_value,
+                                            max_value,
+                                            out)
+        self.started_at = datetime.datetime.now()
+
+    def time_left(self):
+        """Time left with accuracy in seconds."""
+        progress_now = float(self)
+        if progress_now == 0.0:
+            return None
+        time_passed = datetime.datetime.now()-self.started_at
+        time_passed_in_seconds = (
+            time_passed.seconds + time_passed.days * 24 * 3600)
+        time_left_in_seconds = time_passed_in_seconds*(
+            (1-progress_now)/progress_now)
+        return datetime.timedelta(seconds=int(time_left_in_seconds))
+
+    def show(self, accuracy=0):
+        """Print the progress to the stdout.
+
+        Args:
+            accuracy: digits after the decimal point.
+
+        """
+        current_progress = round(float(self.current_value*100)/self.max_value,
+                                 accuracy)
+        previous_progress = round(float(self.previous_value*100)/self.max_value,
+                                 accuracy)
+        if current_progress > previous_progress:
+            self.out.write("{0}% {1} left{2}".format(
+                current_progress, str(self.time_left()), self.carriage))
             self.out.flush()
