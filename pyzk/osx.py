@@ -1,7 +1,5 @@
 # Copyright (c) 2012 zhangkai
 
-# Util functions and classes of urllib2 module
-
 import os
 import errno
 
