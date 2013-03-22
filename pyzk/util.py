@@ -99,7 +99,7 @@ class Progress(object):
         return "{0:.1f}%".format(float(self)*100)
 
     def show(self, accuracy=0):
-        """Print the progress to the stdout.
+        """Print the progress to out.
 
         Args:
             accuracy: digits after the decimal point.
@@ -133,7 +133,7 @@ class TimedProgress(Progress):
         return datetime.timedelta(seconds=int(time_left_in_seconds))
 
     def show(self, accuracy=0):
-        """Print the progress to the stdout.
+        """Print the progress to out.
 
         Args:
             accuracy: digits after the decimal point.
