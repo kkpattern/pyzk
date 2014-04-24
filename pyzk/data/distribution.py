@@ -81,9 +81,50 @@ class Distribution(object):
         @param count: How many values to add.
         """
         try:
-            self._distribution[value] += count
+            self[value] += count
         except KeyError:
-            self._distribution[value] = count
+            self[value] = count
+
+    def load(self, stream=sys.stdin, value_parser=str, count_parser=int,
+             separator=None):
+        """
+        Load data from a file-like object. The format of the input should be:
+          value count
+          or
+          value
+
+        @param stream: A file-like object.
+
+        @type value_parser: C{callable}
+        @param value_parser: Parse the value from str.
+
+        @type count_parser: C{callable}
+        @param count_parser: Parse the count from str.
+
+        @type separator: C{str}
+        @param separator: The separator used in input stream.
+        """
+        for line_number, line in enumerate(stream, start=1):
+            striped_line = line.strip()
+            if striped_line:
+              data = striped_line.split(separator)
+              if len(data) > 2:
+                  raise ValueError('Bad input at line {0}: "{1}"'.format(
+                      line_number, striped_line))
+              else:
+                  try:
+                      value = value_parser(data[0])
+                  except ValueError:
+                      raise ValueError('Bad input at line {0}: "{1}"'.format(
+                          line_number, striped_line))
+                  try:
+                      count = count_parser(data[1])
+                  except IndexError:
+                      count = 1
+                  except ValueError:
+                      raise ValueError('Bad input at line {0}: "{1}"'.format(
+                          line_number, striped_line))
+                  self.add(value, count)
 
     def output_sorted(self, reverse=True, stream=sys.stdout):
         """
