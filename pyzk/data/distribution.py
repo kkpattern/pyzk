@@ -44,6 +44,21 @@ def output_unique(distribution, reverse=True,
             "{0}{1}{2}\n".format(value, separator, distribution[value]))
 
 
+def export_unique_xy(distribution, reverse=False):
+    """
+    Export unique format data as x-axis and y-axis C{list}s.
+
+    @type reverse: C{bool}
+    @param reverse: If True the data will be reverse sorted.
+
+    @return: (C{list}, C{list}).
+    """
+    sorted_values = sorted(distribution, reverse=reverse)
+    x = [v for v in sorted_values]
+    y = [distribution[v] for v in sorted_values]
+    return (x, y)
+
+
 def export_sorted(distribution, reverse=True):
     """
     Export distribution in sorted format in a C{list}.
@@ -152,6 +167,17 @@ class Distribution(object):
         Export the distribution in a C{dict}.
         """
         return dict(self._distribution)
+
+    def export_unique_xy(self, reverse=False):
+        """
+        Export unique format data as x-axis and y-axis C{list}s.
+
+        @type reverse: C{bool}
+        @param reverse: If True the data will be reverse sorted.
+
+        @return: (C{list}, C{list}).
+        """
+        return export_unique_xy(self._distribution, reverse=reverse)
 
     def export_sorted(self):
         """
