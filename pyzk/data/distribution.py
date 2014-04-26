@@ -22,7 +22,8 @@ def output_sorted(distribution, reverse=True, stream=sys.stdout):
             stream.write("{0}\n".format(value))
 
 
-def output_unique(distribution, reverse=True, stream=sys.stdout):
+def output_unique(distribution, reverse=True,
+                  stream=sys.stdout, separator=' '):
     """
     Given a C{dict} in which the key is the item and value is the count of
     the item, output the distribution in unique format.
@@ -34,9 +35,13 @@ def output_unique(distribution, reverse=True, stream=sys.stdout):
     @param reverse: If True the value will be reverse unique.
 
     @param stream: A file-like object into which the output is wrote.
+
+    @type separator: C{str}
+    @param separator: The separator to use.
     """
     for value in sorted(distribution, reverse=reverse):
-        stream.write("{0} {1}\n".format(value, distribution[value]))
+        stream.write(
+            "{0}{1}{2}\n".format(value, separator, distribution[value]))
 
 
 def export_sorted(distribution, reverse=True):
@@ -165,7 +170,7 @@ class Distribution(object):
         """
         output_sorted(self._distribution, reverse, stream)
 
-    def output_unique(self, reverse=False, stream=sys.stdout):
+    def output_unique(self, reverse=False, stream=sys.stdout, separator=' '):
         """
         Output the data distribution in unique format.
 
@@ -173,5 +178,8 @@ class Distribution(object):
         @param reverse: If True the value will be reverse sorted.
 
         @param stream: A file-like object into which the output is wrote.
+
+        @type separator: C{str}
+        @param separator: The separator to use.
         """
-        output_unique(self._distribution, reverse, stream)
+        output_unique(self._distribution, reverse, stream, separator)
