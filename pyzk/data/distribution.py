@@ -39,6 +39,22 @@ def output_unique(distribution, reverse=True, stream=sys.stdout):
         stream.write("{0} {1}\n".format(value, distribution[value]))
 
 
+def export_sorted(distribution, reverse=True):
+    """
+    Export distribution in sorted format in a C{list}.
+
+    @param distribution: A C{dict}-like object.
+
+    @type reverse: C{bool}
+    @param reverse: If True the value will be reverse sorted.
+    """
+    result = []
+    for value in sorted(distribution, reverse=reverse):
+        for i in range(distribution[value]):
+            result.append(value)
+    return result
+
+
 class Distribution(object):
     """
     Manage data distribution, output the distribution in sorted or unique
@@ -125,6 +141,18 @@ class Distribution(object):
                       raise ValueError('Bad input at line {0}: "{1}"'.format(
                           line_number, striped_line))
                   self.add(value, count)
+
+    def export(self):
+        """
+        Export the distribution in a C{dict}.
+        """
+        return dict(self._distribution)
+
+    def export_sorted(self):
+        """
+        Export distribution in sorted format in a C{list}.
+        """
+        return export_sorted(self._distribution)
 
     def output_sorted(self, reverse=True, stream=sys.stdout):
         """
