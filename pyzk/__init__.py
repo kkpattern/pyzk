@@ -11,4 +11,4 @@ __version__ = "0.0.1"
 __author__ = "Zhang Kai"
 __copyright__ = "Copyright 2012 Zhang Kai"
 
-__all__ = ["util"]
+__all__ = ["util", "loggingx", "osx", "urllibx", "threadingx"]
