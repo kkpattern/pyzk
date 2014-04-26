@@ -26,7 +26,8 @@ class NoRedirect(urllib2.HTTPRedirectHandler):
 
 class URLOpener(object):
     """URLOpener: user http get and http post to open url."""
-    def __init__(self, proxy=None, redirect=True):
+    def __init__(self, proxy=None, redirect=True, timeout=None):
+        self._timeout=timeout
         proxy_parameter = {}
         if proxy:
             proxy_parameter.extend({'http': proxy, 'https':proxy})
@@ -49,7 +50,7 @@ class URLOpener(object):
 
     def open(self, url, data=None, headers=None):
         request = urllib2.Request(url, data, headers)
-        f = self.__url_opener.open(request)
+        f = self.__url_opener.open(request, timeout=self._timeout)
         data = f.read()
         content_length = int(f.info().getheader("content-length"))
         if len(data) != content_length:
